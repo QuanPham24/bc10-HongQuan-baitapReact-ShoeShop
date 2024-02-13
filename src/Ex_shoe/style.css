@@ -1,0 +1,12 @@
+.titleShoe{
+    text-align: center;
+    font-size: 50px;
+    color: red;
+}
+button{
+    border-radius: 6px;
+    padding: 10px 30px;
+    border: 2px solid black;
+    background: white;
+    font-size: 24px;
+}
