@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import "./style.css"
 import List from './List'
+import Detail from './Detail';
+import Cart from './Cart';
 
 export default class Ex_shoe extends Component {
     state={
@@ -126,7 +128,17 @@ export default class Ex_shoe extends Component {
                 image: "http://svcy3.myclass.vn/images/nike-air-max-270-react.png"
               } 
         ],
-        detail:{},
+        detail:{
+          id: 1,
+          name: "Adidas Prophere",
+          alias: "adidas-prophere",
+          price: 350,
+          description: "The adidas Primeknit upper wraps the foot with a supportive fit that enhances movement.\r\n\r\n",
+          shortDescription: "The midsole contains 20% more Boost for an amplified Boost feeling.\r\n\r\n",
+          quantity: 995,
+          image: "http://svcy3.myclass.vn/images/adidas-prophere.png"
+        },
+        cart:[]
     };
 
     handleChangeDetail = (shoe) =>{
@@ -135,15 +147,66 @@ export default class Ex_shoe extends Component {
         })
     }
 
+    handleAddToCart = (shoe) => {
+      let cloneCart = [...this.state.cart];
+      let index = cloneCart.findIndex((item) =>{
+        return item.id === shoe.id;
+      })
 
+      if(index === -1){
+        let newShoe = {...shoe,amount:1};
+        cloneCart.push(newShoe);
+      }else{
+        cloneCart[index].amount++;
+      }
+      this.setState({
+        cart: cloneCart,
+      })
+    }
+
+    handleIncrease =(itemID) => {
+      let updateCart = this.state.cart.map (item => item.id = itemID ? {...item,amount:item.amount+1}: item);
+      this.setState({cart: updateCart});
+    }
+
+    handleDecrease =(itemId) => {
+      let updateCart = this.state.cart.map(item => item.id = itemId ? {...item,amount: Math.max(item.amount-1,0)} : item)
+      let newCart = updateCart.filter(item => item.amount > 0);
+      this.setState({
+        cart:newCart,
+      })
+    }
+
+    handleDelete = (itemId) =>{
+      let newCart = this.state.cart.filter(item => item.id !== itemId);
+      this.setState({
+        cart:newCart,
+      })
+    }
   render() {
     return (
-      <div className='container'>
+      <div className='row justify-content-center'>
         <h2 className='titleShoe'>Shoe shop</h2>
-        <List 
+        <div className='row w-100'>
+          <div className='col-md-7'>
+            <List 
+            handleAddToCart ={this.handleAddToCart}
             handleViewDetail = {this.handleChangeDetail}
             shoeArr ={this.state.shoeArr}
         />
+          </div>
+        
+        <div className='col-md-5'>
+          <Detail shoe={this.state.detail}/>
+        </div>
+        <Cart 
+          cart ={this.state.cart}
+          handleIncrease = {this.handleIncrease}
+          handleDecrease = {this.handleDecrease}
+          handleDelete ={this.handleDelete}
+        />
+        
+        </div>
       </div>
     )
   }

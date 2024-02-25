@@ -7,7 +7,9 @@ export default class Item extends Component {
       <div className='col-3'>
         <img src={image} className="w-100" alt="" />
         <h5>{name}</h5>
-        <button className='btn-success'>add</button>
+        <button className='btn-success' onClick={() => {
+          this.props.handleAddToCart(this.props.data);
+        }}>add</button>
         <button className='btn-dark' onClick={() => {
             this.props.handleClickView(this.props.data);
         }}>view</button>
